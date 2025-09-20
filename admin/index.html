@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Portal</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Login Section -->
+        <div id="login-section" class="login-container fade-in">
+            <div class="login-card scale-in">
+                <div class="login-header">
+                    <h1><i class="fas fa-lock pulse"></i> Admin Login</h1>
+                    <p>Grievance Redressal System</p>
+                </div>
+                <div class="login-form">
+                    <div class="form-group slide-up">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" placeholder="Enter your username" class="input-animate">
+                    </div>
+                    <div class="form-group slide-up">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" placeholder="Enter your password" class="input-animate">
+                    </div>
+                    <button id="login-btn" class="btn primary ripple">Login</button>
+                    <div id="login-error" class="error-message" style="display: none;">
+                        Invalid username or password. Please try again.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Section -->
+        <div id="dashboard-section" style="display: none;">
+            <header class="admin-header slide-down">
+                <!-- Menu toggle button will be inserted here by JavaScript -->
+                <div class="logo">
+                    <h1><i class="fas fa-comment-dots bounce"></i> GrieveBuddy</h1>
+                </div>
+                <div class="user-info fade-in">
+                    <span id="admin-username"></span>
+                    <span id="admin-department"></span>
+                    <button id="logout-btn" class="btn logout ripple">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </header>
+
+            <div class="dashboard-container">
+                <aside class="sidebar slide-right">
+                    <nav>
+                        <ul>
+                            <li class="active" data-section="complaints">
+                                <i class="fas fa-clipboard-list"></i> Complaints
+                            </li>
+                            <li data-section="departments">
+                                <i class="fas fa-building"></i> Departments
+                            </li>
+                            <li data-section="reports">
+                                <i class="fas fa-chart-bar"></i> Reports
+                            </li>
+                        </ul>
+                    </nav>
+                </aside>
+
+                <main class="main-content fade-in">
+                    <!-- Complaints Section -->
+                    <section id="complaints-section" class="dashboard-section active">
+                        <div class="section-header">
+                            <h2>Manage Complaints</h2>
+                            <div class="filters">
+                                <div class="filter-group">
+                                    <label for="filter-department">Department:</label>
+                                    <select id="filter-department" class="select-animate">
+                                        <option value="">All Departments</option>
+                                    </select>
+                                </div>
+                                <div class="filter-group">
+                                    <label for="filter-status">Status:</label>
+                                    <select id="filter-status" class="select-animate">
+                                        <option value="">All Statuses</option>
+                                        <option value="Pending">Pending</option>
+                                        <option value="In Progress">In Progress</option>
+                                        <option value="Resolved">Resolved</option>
+                                    </select>
+                                </div>
+                                <div class="filter-group search-group">
+                                    <input type="text" id="search-ticket" placeholder="Search by ticket..." class="input-animate">
+                                    <button id="search-btn" class="btn secondary ripple"><i class="fas fa-search"></i></button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="complaints-table-container fade-in">
+                            <table class="complaints-table">
+                                <thead>
+                                    <tr>
+                                        <th>Ticket</th>
+                                        <th>Department</th>
+                                        <th>Submitted By</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="complaints-list">
+                                </tbody>
+                            </table>
+                            <div id="no-complaints" class="no-data" style="display: none;">
+                                <i class="fas fa-inbox bounce"></i>
+                                <p>No complaints found</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Departments Section -->
+                    <section id="departments-section" class="dashboard-section">
+                        <div class="section-header">
+                            <h2>Departments</h2>
+                        </div>
+                        <div class="departments-container">
+                            <!-- Back button (hidden by default) -->
+                            <button id="back-to-departments" class="back-to-departments" style="display: none;">
+                                <i class="fas fa-arrow-left"></i> Back to Departments
+                            </button>
+                            
+                            <!-- Departments grid -->
+                            <div class="departments-grid" id="departments-grid">
+                                <!-- Departments will be populated dynamically -->
+                            </div>
+
+                            <!-- Department complaints table (hidden by default) -->
+                            <div id="department-complaints" style="display: none;">
+                                <table class="complaints-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Ticket</th>
+                                            <th>Submitted By</th>
+                                            <th>Date</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="department-complaints-list">
+                                    </tbody>
+                                </table>
+                                <div id="no-department-complaints" class="no-data" style="display: none;">
+                                    <i class="fas fa-inbox bounce"></i>
+                                    <p>No complaints found for this department</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Reports Section -->
+                    <section id="reports-section" class="dashboard-section">
+                        <div class="section-header">
+                            <h2>Reports & Analytics</h2>
+                        </div>
+                        <div class="reports-container fade-in">
+                            <div class="stats-row">
+                                <div class="stat-card scale-in">
+                                    <div class="stat-icon"><i class="fas fa-clipboard-list pulse"></i></div>
+                                    <div class="stat-data">
+                                        <h3>Total Complaints</h3>
+                                        <p id="stat-total" class="counter" data-target="0">0</p>
+                                    </div>
+                                </div>
+                                <div class="stat-card scale-in">
+                                    <div class="stat-icon pending"><i class="fas fa-clock pulse"></i></div>
+                                    <div class="stat-data">
+                                        <h3>Pending</h3>
+                                        <p id="stat-pending" class="counter" data-target="0">0</p>
+                                    </div>
+                                </div>
+                                <div class="stat-card scale-in">
+                                    <div class="stat-icon progress"><i class="fas fa-spinner pulse"></i></div>
+                                    <div class="stat-data">
+                                        <h3>In Progress</h3>
+                                        <p id="stat-progress" class="counter" data-target="0">0</p>
+                                    </div>
+                                </div>
+                                <div class="stat-card scale-in">
+                                    <div class="stat-icon resolved"><i class="fas fa-check-circle pulse"></i></div>
+                                    <div class="stat-data">
+                                        <h3>Resolved</h3>
+                                        <p id="stat-resolved" class="counter" data-target="0">0</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chart-containers">
+                                <div class="chart-card slide-up">
+                                    <h3>Complaints Department</h3>
+                                    <canvas id="dept-chart"></canvas>
+                                </div>
+                                <div class="chart-card slide-up">
+                                    <h3>Complaints Status</h3>
+                                    <canvas id="status-chart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </main>
+            </div>
+        </div>
+
+        <!-- Complaint Detail Modal -->
+        <div id="complaint-modal" class="modal">
+            <div class="modal-content scale-in">
+                <div class="modal-header">
+                    <h2>Complaint Details</h2>
+                    <span class="close">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <div class="complaint-header">
+                        <span class="ticket-number" id="modal-ticket"></span>
+                        <span class="complaint-status" id="modal-status"></span>
+                    </div>
+                    <div class="complaint-info fade-in">
+                        <div class="info-group">
+                            <label>Submitted By:</label>
+                            <p id="modal-user"></p>
+                        </div>
+                        <div class="info-group">
+                            <label>Email:</label>
+                            <p id="modal-email"></p>
+                        </div>
+                        <div class="info-group">
+                            <label>Department:</label>
+                            <p id="modal-department"></p>
+                        </div>
+                        <div class="info-group">
+                            <label>Date Submitted:</label>
+                            <p id="modal-date"></p>
+                        </div>
+                        <div class="info-group">
+                            <label>Location:</label>
+                            <p id="modal-location-text"></p>
+                        </div>
+                    </div>
+                    <div class="complaint-description">
+                        <label>Description:</label>
+                        <p id="modal-description"></p>
+                    </div>
+                    <div id="modal-image-container" class="complaint-image" style="display: none;">
+                        <label>Attached Image:</label>
+                        <div class="image-view">
+                            <img id="modal-image" src="" alt="Complaint Image">
+                        </div>
+                    </div>
+                    <div class="update-status">
+                        <label>Update Status:</label>
+                        <div class="status-options">
+                            <select id="update-status-select" class="select-animate">
+                                <option value="Pending">Pending</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Resolved">Resolved</option>
+                            </select>
+                            <button id="update-status-btn" class="btn primary ripple">Update Status</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="fullscreen-modal" class="fullscreen-modal" onclick="this.style.display='none'">
+        <img id="fullscreen-image" src="" alt="Fullscreen Image">
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
