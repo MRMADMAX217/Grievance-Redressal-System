@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Portal</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-comment-dots"></i>GrieveBuddy</h1>
+            <p>Submit your grievances and track their status</p>
+        </header>
+
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="submit">Submit Complaint</button>
+            <button class="tab-btn" data-tab="track">Track Complaint</button>
+        </div>
+
+        <main>
+            <!-- Submit Complaint Form -->
+            <section id="submit-section" class="tab-content active">
+                <div class="chat-container">
+                    <div class="chat-messages" id="chat-messages">
+                        <!-- Will be sent by the Chatbot -->
+                    </div>
+                    <div class="chat-input">
+                        <input id="user-input" placeholder="Describe your complaint here..."></input>
+                        <button id="send-btn" type="button"><i class="fas fa-paper-plane"></i></button>
+                    </div>
+                </div>
+
+                <form id="complaintForm" onsubmit="return false;">
+                    <div class="complaint-form" id="complaint-form" style="display: none;">
+                        <h2>Submit Your Complaint</h2>
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone">
+                        </div>
+                        <div class="form-group">
+                            <label for="complaint">Complaint</label>
+                            <textarea id="complaint" rows="5" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Address</label>
+                            <textarea id="address" rows="3" placeholder="Enter the address where the issue is located" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="image-upload">Upload Image (if applicable)</label>
+                            <input type="file" id="image-upload" accept="image/*">
+                            <div class="image-preview" id="image-preview"></div>
+                        </div>
+                        <button id="submit-complaint" type="button" class="btn primary">Submit Complaint</button>
+                    </div>
+                </form>
+
+                <div class="submission-result" id="submission-result" style="display: none;">
+                    <div class="success-icon"><i class="fas fa-check-circle"></i></div>
+                    <h2>Complaint Submitted Successfully!</h2>
+                    <div class="ticket-info">
+                        <p>Your ticket number is: <span id="ticket-number" class="highlight"></span></p>
+                        <p>Department assigned: <span id="assigned-department" class="highlight"></span></p>
+                        <p>Please save this ticket number for tracking your complaint status.</p>
+                    </div>
+                    <button id="new-complaint" class="btn secondary">Submit Another Complaint</button>
+                </div>
+
+                <div id="ticket-info" style="display: none; margin-top: 20px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; background-color: #f9f9f9;">
+                    <!-- Ticket information will be dynamically inserted here -->
+                </div>
+            </section>
+
+            <!-- Track Complaint Section -->
+            <section id="track-section" class="tab-content">
+                <div class="track-container">
+                    <h2>Track Your Complaint</h2>
+                    <div class="form-group">
+                        <label for="track-ticket">Enter Your Ticket Number</label>
+                        <input type="text" id="track-ticket" placeholder="e.g., TKT-1A2B3C4D">
+                        <button id="track-btn" class="btn primary">Track</button>
+                    </div>
+
+                    <div class="complaint-details" id="complaint-details" style="display: none;">
+                        <h3>Complaint Details</h3>
+                        <div class="detail-row">
+                            <span class="label">Ticket Number:</span>
+                            <span id="detail-ticket" class="detail-value"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Department:</span>
+                            <span id="detail-department" class="detail-value"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Address:</span>
+                            <span id="detail-address" class="detail-value"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Submitted On:</span>
+                            <span id="detail-date" class="detail-value"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Status:</span>
+                            <span id="detail-status" class="detail-value status"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Last Updated:</span>
+                            <span id="detail-updated" class="detail-value"></span>
+                        </div>
+                        <div class="detail-row description">
+                            <span class="label">Description:</span>
+                            <p id="detail-description" class="detail-value"></p>
+                        </div>
+                    </div>
+
+                    <div class="track-error" id="track-error" style="display: none;">
+                        <div class="error-icon"><i class="fas fa-exclamation-circle"></i></div>
+                        <p id="error-message">Ticket not found. Please check the ticket number and try again.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 GrieveBuddy. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
